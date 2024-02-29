@@ -18,7 +18,7 @@ Running `bashScript1toRun.sh` requires `wet.paths` for the crawl of interested d
 Put $n$ outputs across $c$ files into one csv file. 
 
 
-**HOW TO REPRODUCE.**
+## **HOW TO REPRODUCE.**
 
 * Copy this repo into a workspace, e.g. HPC, which has enough RAM to run things.
 * Edit lines 7 and 17 in `bashScript1toRun.sh` to be your account.
