@@ -7,8 +7,7 @@ Prototype scripts that are easy to edit variables for different outputs. Example
 
 **FilterPostcodeLookup:**
 
-Takes the ONS postcode lookup: https://geoportal.statistics.gov.uk/datasets/ons::national-statistics-postcode-lookup-2021-census-august-2023/about and filters this to a subset of postcodes of interest. `BristolPCfilter.ipynb` filters out the postcodes associated with Bristol for this prototype. Output file is called `postcodeLookup.csv` and is used in the next step. 
-
+Takes the ONS postcode lookup: https://geoportal.statistics.gov.uk/datasets/ons::national-statistics-postcode-lookup-2021-census-august-2023/about and filters this to a subset of postcodes of interest. `BristolPCfilter.ipynb` filters out the postcodes associated with Bristol for this prototype. Output file is called `BristolPostcodeLookup.csv` and is used in the next step. `laua`=='E06000023'is the Bristol Local Authority (https://www.nomisweb.co.uk/reports/localarea?compare=E06000023).
 **bashChunking:**
 
 Running `bashScript1toRun.sh` requires `wet.paths` for the crawl of interested downloaded from: https://commoncrawl.org/overview to be present in the folder, the script `read_wet.py` and `postcodeLookup.csv` to be in the folder. `bashScript1toRun.sh` creates a specified number of folders, copies the 3 aforementioned files into each folder, creates a bash file in each folder, and runs each of these bash scripts. Across the $c$ folders are $n$ csv and $n$ mtx files of data. Bash scripts are written for slurm. 
