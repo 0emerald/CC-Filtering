@@ -9,7 +9,7 @@
 # state the crawl date
 crawlDate="202350"
 # Input value of n - this is the number of .wet files in the crawl
-n=30
+n=90000
 # Define the value of c = the number of chunks
 # NOTE: you need n to be divisible by c or you will have problems 
 c=10
@@ -22,15 +22,15 @@ for k in $(seq 0 $((c-1))); do
     folder="folder$k"
     mkdir "$folder"
     # copy files into each folder
-    cp testpy.py "$folder"
     cp read_wet.py "$folder"
     cp wet.paths "$folder"
+    cp BristolPostcodeLookup.csv "$folder"
     # Create bash scripts
     cat <<EOF > "$folder/bash$k.sh"
 #!/bin/bash
 
 #SBATCH --job-name=bash${crawlDate}_chunk$k
-#SBATCH --time=01:00:00
+#SBATCH --time=10-00:00:00
 #SBATCH --partition=compute
 #SBATCH --mem=25G
 #SBATCH --account=${account}
@@ -74,14 +74,18 @@ for ((i=($k*N); i<(($k+1)*N); i++)); do
 
   # Execute the Python script with the output file name
   PY_OUTPUT_FILE_NAME="crawldata${crawlDate}segment\${SEGMENT_NUMBER}.csv"
-  OUTPUT_MTX_NAME="crawldata${crawlDate}segment\${SEGMENT_NUMBER}.mtx"
   
-  # run python script
-  python read_wet.py
+  # run python script and pass arguments from the bash script in
+  python read_wet.py "${SERVER_URL}" "${FILE_NAME}"
+
+  # add the CC filepath as a row
+  # { echo ${SERVER_URL}${FILE_NAME}; cat outputdf.csv; } > temp.csv
+
+  # rename file
+  mv "temp.csv" "$PY_OUTPUT_FILE_NAME"
 
   # rename file
   mv "outputdf.csv" "\$PY_OUTPUT_FILE_NAME"
-  mv "X.mtx" "\$OUTPUT_MTX_NAME"
 
   # Delete the .warc file
   rm "\$FILE_NAME_TO_DELETE"

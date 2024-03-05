@@ -11,11 +11,22 @@ nltk.download('punkt')
 from scipy.io import mmwrite
 from scipy.sparse import csr_matrix
 import string
+import sys
 
 def postcode_finder(text):
     postcodes = re.findall(r'\b[A-Z]{1,2}[0-9][A-Z0-9]? [0-9][ABD-HJLNP-UW-Z]{2}\b', text)
     # https://stackoverflow.com/questions/378157/python-regular-expression-postcode-search
     return list(set(postcodes))
+
+# function to find postcodes in the BristolPostcodeLookup
+BristolPostcodeLookup = pd.read_csv('BristolPostcodeLookup.csv')
+def Bristol_postcode_finder(text):
+    postcodes = re.findall(r'\b[A-Z]{1,2}[0-9][A-Z0-9]? [0-9][ABD-HJLNP-UW-Z]{2}\b', text)
+    postcodes = list(set(postcodes))
+    matches = BristolPostcodeLookup['pcds'].apply(lambda x: any(item in x for item in postcodes)).any()
+    if matches: 
+        return postcodes
+    
 
 # function to extract website from url 
 def extract_website(url):
@@ -29,7 +40,10 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 # loop over all files within directory that have .warc extension
 for file_path in glob.glob(dir_path + "/*.wet"):
 
-    X_list = []
+    # Access arguments passed from the Bash script
+    arg1 = sys.argv[1]
+    arg2 = sys.argv[2]
+    cclocation = arg1 + arg2 # add the strings
 
     with open('outputdf.csv', 'w', newline='') as output_csv:
         csv_writer = csv.writer(output_csv)
@@ -48,14 +62,8 @@ for file_path in glob.glob(dir_path + "/*.wet"):
                     if ('.co.uk/' in uri) & (language == 'eng'):
                         website = extract_website(uri)
                         text = record.content_stream().read().decode('utf-8', 'ignore') # ignores symbols not in utf-8 
-                        postcodes = postcode_finder(text) # do postcode search
+                        postcodes = Bristol_postcode_finder(text) # do postcode search for Bristol postcodes
                         text = text.lower() # all into lowercase
 
-                        csv_writer.writerow([ uri,website,postcodes])
-    
-    # Save X_array as a sparse matrix
-    mat = np.vstack(X_list)
-    print(mat.shape)
-    mat = csr_matrix(mat)
-    # save sparse matrix
-    mmwrite('X.mtx', mat)
+                        if postcodes is not None:  # Check if there are Bristol postcodes
+                            csv_writer.writerow([ uri,website,postcodes,cclocation,text]) ##cclocation
