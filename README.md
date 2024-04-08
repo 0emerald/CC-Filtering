@@ -31,4 +31,8 @@ Put $n$ outputs across $c$ files into one csv file, to `df202350.csv`, by runnin
 ``` bash
 sbatch bashScript1toRun.sh
 ```
-* This will run one job, then it will create $c$ further jobs. Once these are all complete,
+* This will run one job, then it will create $c$ further jobs. Once these are all complete, run
+``` bash
+sbatch CombineOutputs.sh
+```
+
