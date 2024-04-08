@@ -16,7 +16,6 @@ c=10
 # need your account - this is mine
 account="math026082"
 
-
 # Create c folders
 for k in $(seq 0 $((c-1))); do
     folder="folder$k"
@@ -30,7 +29,7 @@ for k in $(seq 0 $((c-1))); do
 #!/bin/bash
 
 #SBATCH --job-name=bash${crawlDate}_chunk$k
-#SBATCH --time=10-00:00:00
+#SBATCH --time=5-00:00:00
 #SBATCH --partition=compute
 #SBATCH --mem=25G
 #SBATCH --account=${account}
@@ -76,19 +75,17 @@ for ((i=($k*N); i<(($k+1)*N); i++)); do
   PY_OUTPUT_FILE_NAME="crawldata${crawlDate}segment\${SEGMENT_NUMBER}.csv"
   
   # run python script and pass arguments from the bash script in
-  python read_wet.py "${SERVER_URL}" "${FILE_NAME}"
+  python read_wet.py "\${SERVER_URL}" "\${FILE_NAME}"
 
   # add the CC filepath as a row
-  # { echo ${SERVER_URL}${FILE_NAME}; cat outputdf.csv; } > temp.csv
-
-  # rename file
-  mv "temp.csv" "$PY_OUTPUT_FILE_NAME"
+  # { echo \${SERVER_URL}\${FILE_NAME}; cat outputdf.csv; } > temp.csv
 
   # rename file
   mv "outputdf.csv" "\$PY_OUTPUT_FILE_NAME"
 
   # Delete the .warc file
   rm "\$FILE_NAME_TO_DELETE"
+
 done
 
 echo End time is "\$(date)"

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --job-name=collate202221_mtx
+#SBATCH --job-name=CombineOutputs
 #SBATCH --time=3-00:00:00
 #SBATCH --partition=compute
 #SBATCH --mem=100G
@@ -21,4 +21,12 @@ source activate
 
 export OMP_NUM_THREADS=1
 
-python collate202221_mtx.py
+# State the crawl date
+crawlDate="202350"
+# Input value of n - this is the number of .wet files in the crawl
+n=90000
+# State the value of c = the number of chunks
+c=10
+# NOTE: these crawlDate, n and c values must be the same as specified in bashScript1toRun.sh
+
+python CombineOutputs.py "${c}" "${n}" "${crawlDate}"
