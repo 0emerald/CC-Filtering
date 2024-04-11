@@ -19,16 +19,16 @@ Running `bashScript1toRun.sh` requires `wet.paths` for the crawl of interested d
 Put $n$ outputs across $c$ files into one csv file, to `df202350.csv`, by running `CombineOutputs.sh` on the HPC. 
 * `CombineOutputs_v1` doesn't work quite right, so use `v2`. `v2` is the code in the *CodeToReproduce* Folder. 
 
-----will want one folder with bashChunking and CombineOutputs scripts and files all in one place, so the user just copies one folder and runs stuff------------
-## **HOW TO REPRODUCE.**
+## **HOW TO REPRODUCE. Uses only the code that is in CodeToReproduce folder - this is manually copied in**
+----`CodeToReproduce` is one folder with bashChunking and CombineOutputs scripts and files all in one place, so the user just copies one folder and runs stuff----
 
-* Copy this repo into a workspace, e.g. HPC, which has enough RAM to run things.
+* Copy this repo into a workspace, e.g. HPC, which has enough RAM to run things and go into folder `CodeToReproduce` OR just copy the folder `CodeToReproduce` and be inside this folder.
 * Edit lines 7 and 17 in `bashScript1toRun.sh` to be your account.
 * Check line 10 in `bashScript1toRun.sh` is the crawl you are interested in.
 * Check line 12 (where $n$ is specified) matches the number of wet files in the crawl you are interested in.
 * If you change the crawl, you will also need to download the correct corresponding `wet.paths` file and copy this into the folder and remove the old `wet.paths` file. The one currently in there corresponds to the 202350 crawl. Just changing line 10 will NOT change the data you download and look at, just the file naming.
 * Check line 15 (where $c$, the number of chunks, is specified) suits your requirements, and that $n/c$ is an integer. 
-* In the folder **bashChunking**, run `bashScript1toRun.sh` (files: `'wet.paths`, `read_wet.py`, and `BristolPostcodeLookup.csv` must be present in the folder).
+* Run `bashScript1toRun.sh` (files: `'wet.paths`, `read_wet.py`, and `BristolPostcodeLookup.csv` must be present in the folder).
 ``` bash
 sbatch bashScript1toRun.sh
 ```
@@ -36,4 +36,5 @@ sbatch bashScript1toRun.sh
 ``` bash
 sbatch CombineOutputs.sh
 ```
-
+This will put all the $n$ csv files into one csv file called: `dfYYYYWW.csv` (where YYYYWW represents the crawl date. YYYYWW=203050 for the example code).
+* I am not sure if/where to store the file for access to `df202350.csv` (it is 2.5GB in size). 
