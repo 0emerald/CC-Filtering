@@ -17,6 +17,7 @@ Running `bashScript1toRun.sh` requires `wet.paths` for the crawl of interested d
 **CombineOutputs:**
 
 Put $n$ outputs across $c$ files into one csv file, to `df202350.csv`, by running `CombineOutputs.sh` on the HPC. 
+* `CombineOutputs_v1` doesn't work quite right, so use `v2`. `v2` is the code in the *CodeToReproduce* Folder. 
 
 ----will want one folder with bashChunking and CombineOutputs scripts and files all in one place, so the user just copies one folder and runs stuff------------
 ## **HOW TO REPRODUCE.**
