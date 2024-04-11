@@ -33,18 +33,14 @@ with open(output_csv_path, mode='w', newline='') as output_csv_file:
         folder_path = os.path.join(os.getcwd(), folder_name)
         os.chdir(folder_path)
 
-        for file in range(N):
-            file_name = "crawldata" + crawlDate + "segment" + str(idx + file).zfill(5) + ".csv"
+        for file_index in range(N):
+            file_name = "crawldata" + crawlDate + "segment" + str(idx + file_index).zfill(5) + ".csv"
             try:
                 with open(file_name, 'r') as csv_file:
                     csv_reader = csv.reader(csv_file)
-                    # Check if the CSV file is empty
-                    is_empty = len(list(csv_reader)) == 0
-                    if is_empty:
-                        pass
-                    else: 
-                        for row in csv_reader:
-                            output_csv_writer.writerow(row)
+                    # Iterate over each row in the CSV file and write it to the output CSV
+                    for row in csv_reader:
+                        output_csv_writer.writerow(row)
             except FileNotFoundError:
                 pass
 
