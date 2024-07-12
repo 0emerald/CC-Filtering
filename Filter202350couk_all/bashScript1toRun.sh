@@ -23,7 +23,7 @@ for k in $(seq 0 $((c-1))); do
     # copy files into each folder
     cp read_wet.py "$folder"
     cp wet.paths "$folder"
-    cp BristolPostcodeLookup.csv "$folder"
+    cp UK_PostcodeLookup.csv "$folder"
     # Create bash scripts
     cat <<EOF > "$folder/bash$k.sh"
 #!/bin/bash
