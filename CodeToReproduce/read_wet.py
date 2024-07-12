@@ -23,10 +23,12 @@ BristolPostcodeLookup = pd.read_csv('BristolPostcodeLookup.csv')
 def Bristol_postcode_finder(text):
     postcodes = re.findall(r'\b[A-Z]{1,2}[0-9][A-Z0-9]? [0-9][ABD-HJLNP-UW-Z]{2}\b', text)
     postcodes = list(set(postcodes))
-    matches = BristolPostcodeLookup['pcds'].apply(lambda x: any(item in x for item in postcodes)).any()
+    # make sure matches begin with "BS"
+    postcodes = [postcode for postcode in postcodes if postcode.startswith("BS")]
+    # Filter postcodes to only include those found in BristolPostcodeLookup['pcds']
+    matches = [postcode for postcode in postcodes if postcode in BristolPostcodeLookup['pcds'].values]
     if matches: 
-        return postcodes
-    
+        return matches
 
 # function to extract website from url 
 def extract_website(url):
