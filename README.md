@@ -43,7 +43,27 @@ This will put all the $n$ csv files into one csv file called: `dfYYYYWW.csv` (wh
 ## Crawl all UK postcodes for 202350 crawl as above
 
 **FilterPostcodeLookup:**
-* Run `UK_PCfilter.ipynb` to create `UK_PostcodeLookup.csv`. Copy the output file into the folder `Filter202350couk_all`. (all UK postcode lookup file too large to host on GitHub).
+* Run `UK_PCfilter.ipynb` to create `UK_PostcodeLookup.csv`. Copy the output file into the folder `Filter202350couk_all`. (all UK postcode lookup file too large to host on GitHub). This is inside the same folder the BristolPostcodeLookup is generated in.
 
 **Filter202350couk_all:**
+## **HOW TO REPRODUCE. Uses only the code that is in Filter202350couk_all folder and the UK_PostcodeLookup.csv file which must be made as it cannot be hosted on GitHub**
+
+* Copy this folder (Filter202350couk_all) into a workspace, e.g. HPC, which has enough RAM to run things and be inside this folder.
+* Make sure you have `UK_PostcodeLookup.csv` in this folder. 
+* Edit lines 7 and 17 in `bashScript1toRun.sh` to be your account.
+* Check line 10 in `bashScript1toRun.sh` is the crawl you are interested in.
+* Check line 12 (where $n$ is specified) matches the number of wet files in the crawl you are interested in.
+* If you change the crawl, you will also need to download the correct corresponding `wet.paths` file and copy this into the folder and remove the old `wet.paths` file. The one currently in there corresponds to the 202350 crawl. Just changing line 10 will NOT change the data you download and look at, just the file naming.
+* Check line 15 (where $c$, the number of chunks, is specified) suits your requirements, and that $n/c$ is an integer. 
+* Run `bashScript1toRun.sh` (files: `'wet.paths`, `read_wet.py`, and `BristolPostcodeLookup.csv` must be present in the folder).
+``` bash
+sbatch bashScript1toRun.sh
+```
+* This will run one job, then it will create $c$ further jobs. Once these are all complete, run
+``` bash
+sbatch CombineOutputs.sh
+```
+This will put all the $n$ csv files into one csv file called: `dfYYYYWW.csv` (where YYYYWW represents the crawl date. YYYYWW=203050 for the example code).
+* This is going to output a file that is super large.
+* 
 * 
