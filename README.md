@@ -37,4 +37,13 @@ sbatch bashScript1toRun.sh
 sbatch CombineOutputs.sh
 ```
 This will put all the $n$ csv files into one csv file called: `dfYYYYWW.csv` (where YYYYWW represents the crawl date. YYYYWW=203050 for the example code).
-* I am not sure if/where to store the file for access to `df202350.csv` (it is 2.5GB in size). 
+* I am not sure if/where to store the file for access to `df202350.csv` (it is 2.5GB in size).
+* 
+
+## Crawl all UK postcodes for 202350 crawl as above
+
+**FilterPostcodeLookup:**
+* Run `UK_PCfilter.ipynb` to create `UK_PostcodeLookup.csv`. Copy the output file into the folder `Filter202350couk_all`. (all UK postcode lookup file too large to host on GitHub).
+
+**Filter202350couk_all:**
+* 
