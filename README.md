@@ -3,6 +3,11 @@ Prototype scripts that are easy to edit variables for different outputs. Example
 
 **Crawl used in prototype:** 2023-50 (Dec 2023)
 
+25/10/24: NB: HPC has changed the modules, so may need to delete
+`module XXXXX`
+`source activate`
+in bash scripts, and instead activate a conda environment created.
+
 ## **PIPELINE.**
 
 **FilterPostcodeLookup:**
@@ -71,5 +76,7 @@ Here we want to go through all 9 of the crawls carried out by the CommonCrawl an
 
 **Pipeline to reproduce**:
 * Copy the folder `All2021Crawls` into HPC workspace and go into the folder.
-* Make sure you have `UK_PostcodeLookup.csv` in this folder (122MB so cannot host on GitHub). 
+* Make sure you have `UK_PostcodeLookup.csv` in this folder (122MB so cannot host on GitHub).
+* activate conda environment - see `condaEnvNotes.txt`
+* 
 
