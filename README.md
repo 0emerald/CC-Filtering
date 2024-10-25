@@ -71,4 +71,5 @@ Here we want to go through all 9 of the crawls carried out by the CommonCrawl an
 
 **Pipeline to reproduce**:
 * Copy the folder `All2021Crawls` into HPC workspace and go into the folder.
-* 
+* Make sure you have `UK_PostcodeLookup.csv` in this folder (122MB so cannot host on GitHub). 
+
