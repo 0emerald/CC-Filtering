@@ -88,4 +88,5 @@ sbatch bashToScrapeAll2021Crawls.sh
 sbatch bashToScrapeAll2021Crawls.sh
 ```
 * **Need to check the CombineOutputs.sh works, then can make a file to combine all these into one file, perhaps delete records that are duplicated. Can look at parquet formats, removing anything under the landing page by editing the read_wet.py file.**
+* Have left the code to output csv files, combine small csvs into one csv per crawl, then there is code that can be modified (change file names, chunk size, write a bash for), that will convert the big csv to a parquet in chunks to reduce memory usage. 
 
