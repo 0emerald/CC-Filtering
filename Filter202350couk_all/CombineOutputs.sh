@@ -29,4 +29,4 @@ n=90000
 c=10
 # NOTE: these crawlDate, n and c values must be the same as specified in bashScript1toRun.sh
 
-python CombineOutputs_UK.py "${c}" "${n}" "${crawlDate}"
+python CombineOutputs.py "${c}" "${n}" "${crawlDate}"
