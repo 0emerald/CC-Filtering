@@ -80,7 +80,7 @@ Here we want to go through all 9 of the crawls carried out by the CommonCrawl an
 * activate conda environment - see `condaEnvNotes.txt`.
 * Edit lines 7 and 10 in `bashToScrapeAll2021Crawls.sh` to be your account.
 * Run `bashToScrapeAll2021Crawls.sh` (files: `read_wet.py`, and `BristolPostcodeLookup.csv` must be present in the folder, and a folder called `wetpaths` containing `wetYYYYWW.paths` for all crawls interested in).
-* ``` bash
+``` bash
 sbatch bashToScrapeAll2021Crawls.sh
 ```
 * Once all the jobs from this are complete, run `CombineOutputs.sh` - for each crawl it will make one df inside the folder for the crawl.
