@@ -95,12 +95,12 @@ EOF
         chmod +x "$folder/bash$k.sh"
     done
 
-    # # Submit sbatch jobs for each chunk script
-    # for k in $(seq 0 $((c-1))); do
-    #     cd "folder$k" || exit 1
-    #     sbatch "bash$k.sh"
-    #     cd ..
-    # done
+    # Submit sbatch jobs for each chunk script
+    for k in $(seq 0 $((c-1))); do
+        cd "folder$k" || exit 1
+        sbatch "bash$k.sh"
+        cd ..
+    done
 
     # Move back to the main directory for the next crawl date
     cd ..
