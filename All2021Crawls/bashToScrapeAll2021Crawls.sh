@@ -78,19 +78,18 @@ for ((i=($k*N); i<(($k+1)*N); i++)); do
 #   curl --retry 1000 --retry-delay 1 -o "\${OUTPUT_FILE_NAME}" "\${SERVER_URL}\${FILE_NAME}"
 #   gzip -d "\$OUTPUT_FILE_NAME"
 
-  # Infinite retry loop for downloading
+
+  # Infinite loop to ensure the file is downloaded and not empty
   while [[ ! -s "\${OUTPUT_FILE_NAME}" ]]; do
     echo "Attempting to download \${OUTPUT_FILE_NAME}..."
-    curl --retry 1000 --retry-delay 1 -o "${OUTPUT_FILE_NAME}" "${SERVER_URL}${FILE_NAME}"
-    sleep 2  # Optional: Add a small delay
+    curl --retry 1000 --retry-delay 1 -o "\${OUTPUT_FILE_NAME}" "\${SERVER_URL}\${FILE_NAME}"
+    sleep 1  # Optional: Add a small delay
   done
 
-  # Unzip file
-  if [[ -f "$FILE_NAME_TO_DELETE" ]]; then
-    echo "File ${FILE_NAME_TO_DELETE} already unzipped. Skipping."
-  else
-    gzip -d "$OUTPUT_FILE_NAME"
-  fi
+  # Attempt to unzip the file
+  gzip -d "\${OUTPUT_FILE_NAME}"
+
+
 
   PY_OUTPUT_FILE_NAME="crawldata${crawlDate}segment\${SEGMENT_NUMBER}.csv"
   python read_wet.py "\${SERVER_URL}" "\${FILE_NAME}"
