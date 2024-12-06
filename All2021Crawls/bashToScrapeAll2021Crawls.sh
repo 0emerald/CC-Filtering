@@ -86,6 +86,16 @@ for ((i=($k*N); i<(($k+1)*N); i++)); do
     sleep 1  # Optional: Add a small delay
   done
 
+  # Check if the downloaded file is larger than 10MB
+  FILE_SIZE=\$(stat -c %s "\$OUTPUT_FILE_NAME")
+  while [ "\$FILE_SIZE" -le 10485760 ]; do
+    echo "File size is less than 10MB. Waiting 10 seconds..."
+    sleep 10
+    curl "\${SERVER_URL}\${FILE_NAME}" --output "\${OUTPUT_FILE_NAME}"
+    FILE_SIZE=\$(stat -c %s "\$OUTPUT_FILE_NAME")
+  done
+
+
   # Attempt to unzip the file
   gzip -d "\${OUTPUT_FILE_NAME}"
 
