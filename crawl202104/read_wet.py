@@ -7,7 +7,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 import numpy as np
 import nltk
 from nltk.tokenize import TweetTokenizer
-nltk.download('punkt')
+# nltk.download('punkt')
 from scipy.io import mmwrite
 from scipy.sparse import csr_matrix
 import string

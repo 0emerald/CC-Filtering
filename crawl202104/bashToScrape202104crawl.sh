@@ -14,7 +14,7 @@ crawlDates=("202104") # "202110" "202117" "202121" "202125" "202131" "202139" "2
 # List of corresponding number of .wet files for each crawl date
 n_list=(79840 64000 64000 64000 64000 72000 72000 72000 64000)
 # Number of chunks
-c=10
+c=16
 
 # Loop through each crawl date with index to retrieve the corresponding n value
 for i in "${!crawlDates[@]}"; do
@@ -39,6 +39,11 @@ for i in "${!crawlDates[@]}"; do
         cp wet.paths "$folder"
         cp ../UK_PostcodeLookup.csv "$folder"
 
+        # Calculate the number of loops for this chunk
+        N=$((n/c))
+        start=$((k * N))
+        end=$((start + N))
+
         # Create and write the bash script for each chunk
         cat <<EOF > "$folder/bash$k.sh"
 #!/bin/bash
@@ -60,13 +65,10 @@ echo "\${SLURM_JOB_NODELIST}"
 
 export OMP_NUM_THREADS=1
 
-# Number of loops for this chunk
-N=$((n/c))
-
 # Server URL start
 SERVER_URL="https://data.commoncrawl.org/"
 
-for ((i=($k*N); i<(($k+1)*N); i++)); do
+for ((i=${start}; i<${end}; i++)); do
   warcpathslinenumber=\$((i+1))
   warcpaths="wet.paths"
   FILE_NAME=\$(sed -n "\${warcpathslinenumber}{p;q}" "\$warcpaths")
@@ -75,40 +77,42 @@ for ((i=($k*N); i<(($k+1)*N); i++)); do
   OUTPUT_FILE_NAME="crawldata${crawlDate}segment\${SEGMENT_NUMBER}.wet.gz"
   FILE_NAME_TO_DELETE="crawldata${crawlDate}segment\${SEGMENT_NUMBER}.wet"
   
-#   curl --retry 1000 --retry-delay 1 -o "\${OUTPUT_FILE_NAME}" "\${SERVER_URL}\${FILE_NAME}"
-#   gzip -d "\$OUTPUT_FILE_NAME"
-
-
-  # Infinite loop to ensure the file is downloaded and not empty
-  while [[ ! -s "\${OUTPUT_FILE_NAME}" ]]; do
+  # Infinite loop to ensure the file is downloaded and is larger than 10MB
+  while true; do
     echo "Attempting to download \${OUTPUT_FILE_NAME}..."
-    curl --retry 1000 --retry-delay 1 -o "\${OUTPUT_FILE_NAME}" "\${SERVER_URL}\${FILE_NAME}"
+    curl --retry 10000 --retry-delay 1 -o "\${OUTPUT_FILE_NAME}" "\${SERVER_URL}\${FILE_NAME}"
+
+    if [[ -f "\${OUTPUT_FILE_NAME}" ]]; then
+      FILE_SIZE=\$(stat -c %s "\${OUTPUT_FILE_NAME}")
+      if [[ "\${FILE_SIZE}" -gt 10485760 ]]; then
+        echo "File \${OUTPUT_FILE_NAME} is larger than 10MB. Attempting to unzip..."
+        gzip -d "\${OUTPUT_FILE_NAME}" 2>/dev/null
+
+        if [[ \$? -eq 0 ]]; then
+          echo "Successfully downloaded and unzipped \${OUTPUT_FILE_NAME}."
+          break  # Exit the loop if everything is successful
+        else
+          echo "Failed to unzip \${OUTPUT_FILE_NAME}. Retrying download..."
+          rm -f "\${OUTPUT_FILE_NAME}"  # Delete the corrupted file
+        fi
+      else
+        echo "File \${OUTPUT_FILE_NAME} is smaller than 10MB. Retrying download..."
+        rm -f "\${OUTPUT_FILE_NAME}"  # Delete the small file
+      fi
+    else
+      echo "File \${OUTPUT_FILE_NAME} does not exist. Retrying download..."
+    fi
     sleep 1  # Optional: Add a small delay
   done
 
-  # Check if the downloaded file is larger than 10MB
-  FILE_SIZE=\$(stat -c %s "\$OUTPUT_FILE_NAME")
-  while [ "\$FILE_SIZE" -le 10485760 ]; do
-    echo "File size is less than 10MB. Waiting 10 seconds..."
-    sleep 10
-    curl "\${SERVER_URL}\${FILE_NAME}" --output "\${OUTPUT_FILE_NAME}"
-    FILE_SIZE=\$(stat -c %s "\$OUTPUT_FILE_NAME")
-  done
-
-
-  # Attempt to unzip the file
-  gzip -d "\${OUTPUT_FILE_NAME}"
-
-
   PY_OUTPUT_FILE_NAME="crawldata${crawlDate}segment\${SEGMENT_NUMBER}.csv"
   python read_wet.py "\${SERVER_URL}" "\${FILE_NAME}"
-  mv "outputdf.csv" "\$PY_OUTPUT_FILE_NAME"
-  rm "\$FILE_NAME_TO_DELETE"
+  mv "outputdf.csv" "\${PY_OUTPUT_FILE_NAME}"
+  rm "\${FILE_NAME_TO_DELETE}"
 
 done
 
 echo End time is "\$(date)"
-
 EOF
         # Make the script executable
         chmod +x "$folder/bash$k.sh"
@@ -117,7 +121,7 @@ EOF
     # Submit sbatch jobs for each chunk script
     for k in $(seq 0 $((c-1))); do
         cd "folder$k" || exit 1
-        # sbatch "bash$k.sh"
+        sbatch "bash$k.sh"  # Uncomment to submit jobs
         cd ..
     done
 
