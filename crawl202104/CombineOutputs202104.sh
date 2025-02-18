@@ -15,10 +15,6 @@ echo Slurm job ID is "${SLURM_JOBID}"
 echo This jobs runs on the following machines:
 echo "${SLURM_JOB_NODELIST}"
 
-module load lang/python/anaconda/3.7-2019.10
-
-source activate
-
 export OMP_NUM_THREADS=1
 
 # State the crawl date

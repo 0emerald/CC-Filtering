@@ -10,9 +10,9 @@
 account="math026082"
 
 # Array of crawl dates
-crawlDates=("202110")# "202117" "202121" "202125" "202131" "202139" "202143" "202149")
+crawlDates=("202110") # "202117" "202121" "202125" "202131" "202139" "202143" "202149")
 # List of corresponding number of .wet files for each crawl date
-n_list=(64000)# 64000 64000 64000 72000 72000 72000 64000)
+n_list=(64000 64000 64000 64000 72000 72000 72000 64000)
 # Number of chunks
 c=16
 
