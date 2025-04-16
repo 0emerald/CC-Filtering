@@ -12,7 +12,7 @@ in bash scripts, and instead activate a conda environment created.
 
 **FilterPostcodeLookup:**
 
-Takes the ONS postcode lookup: https://geoportal.statistics.gov.uk/datasets/ons::national-statistics-postcode-lookup-2021-census-august-2023/about and filters this to a subset of postcodes of interest. This is not stored in the github repo due to file size, but you can download it from teh above link if needed. `BristolPCfilter.ipynb` filters out the postcodes associated with Bristol for this prototype. Output file is called `BristolPostcodeLookup.csv` and is used in the next step. `laua`=='E06000023'is the Bristol Local Authority (https://www.nomisweb.co.uk/reports/localarea?compare=E06000023). The file `BristolPostcodeLookup.csv` is copied into the *bashChunking* folder where it is used. 
+Takes the ONS postcode lookup: https://geoportal.statistics.gov.uk/datasets/ons::national-statistics-postcode-lookup-2021-census-august-2023/about and filters this to a subset of postcodes of interest. This is not stored in the github repo due to file size, but you can download it from teh above link if needed. `BristolPCfilter.ipynb` filters out the postcodes associated with Bristol for this prototype. Output file is called `BristolPostcodeLookup.csv` and is used in the next step. `laua`=='E06000023' is the Bristol Local Authority (https://www.nomisweb.co.uk/reports/localarea?compare=E06000023). The file `BristolPostcodeLookup.csv` is copied into the *bashChunking* folder where it is used. 
 
 
 **bashChunking:**
@@ -33,7 +33,7 @@ Put $n$ outputs across $c$ files into one csv file, to `df202350.csv`, by runnin
 * Check line 12 (where $n$ is specified) matches the number of wet files in the crawl you are interested in.
 * If you change the crawl, you will also need to download the correct corresponding `wet.paths` file and copy this into the folder and remove the old `wet.paths` file. The one currently in there corresponds to the 202350 crawl. Just changing line 10 will NOT change the data you download and look at, just the file naming.
 * Check line 15 (where $c$, the number of chunks, is specified) suits your requirements, and that $n/c$ is an integer. 
-* Run `bashScript1toRun.sh` (files: `'wet.paths`, `read_wet.py`, and `BristolPostcodeLookup.csv` must be present in the folder).
+* Run `bashScript1toRun.sh` (files: `wet.paths`, `read_wet.py`, and `BristolPostcodeLookup.csv` must be present in the folder).
 ``` bash
 sbatch bashScript1toRun.sh
 ```
